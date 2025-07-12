@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>HasniX Store</title>
+  <meta name="ppck-ver" content="e791f54bdcc62b02d5edd65a16155b8f" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,12 +12,16 @@
       text-align: center;
       padding: 30px;
     }
+    header {
+      margin-bottom: 20px;
+    }
     header img {
       width: 120px;
+      height: auto;
     }
     h1 {
       color: #00ff99;
-      margin: 20px 0 40px 0;
+      margin-bottom: 40px;
     }
     .product {
       background: #2c2c2c;
@@ -26,6 +30,7 @@
       margin: 15px;
       padding: 20px;
       width: 220px;
+      vertical-align: top;
     }
     .product img {
       width: 100px;
@@ -45,59 +50,62 @@
     .product p {
       color: #cccccc;
       font-size: 14px;
+      min-height: 40px;
     }
     .product a {
-      display: inline-block;
-      background-color: #00ff99;
-      color: black;
-      padding: 10px 20px;
+      color: #00ff99;
       text-decoration: none;
-      border-radius: 8px;
-      margin-top: 10px;
+      font-weight: bold;
+    }
+    .pagination {
+      margin-top: 40px;
+    }
+    .pagination a {
+      color: #00ff99;
+      text-decoration: none;
+      margin: 0 10px;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <img src="static/logo.png" alt="Logo" />
+    <img src="/static/logo.png" alt="HasniX Store Logo" />
   </header>
+
   <h1>Welcome to HasniX Store</h1>
 
+  {% for product in products %}
     <div class="product">
-      <img src="static/icons/gamebooster.ico" alt="Game Booster icon">
-      <h2>Game Booster</h2>
-      <p>Boost your PC performance during gaming.</p>
-      <a href="https://drive.google.com/file/d/1UxLsqMEOKq7iLFqIHNcExioxM_7a_1o5/view?usp=drivesdk" target="_blank">Download</a>
+      <img src="/static/icons/{{ product.icon }}" alt="{{ product.name }}">
+      <h2>{{ product.name }}</h2>
+      <p>{{ product.description }}</p>
+      <a href="/product/{{ product.id }}">View Details</a>
     </div>
-    
-    <div class="product">
-      <img src="static/icons/foldercolorizer.ico" alt="Folder Colorizer Pro icon">
-      <h2>Folder Colorizer Pro</h2>
-      <p>Color-code your folders for better organization.</p>
-      <a href="https://drive.google.com/file/d/1UxkbQagklXs7RTTR7UbAS9_PCpGvtny1/view?usp=drivesdk" target="_blank">Download</a>
-    </div>
-    
-    <div class="product">
-      <img src="static/icons/fileorganizer.ico" alt="File Organizer VIP icon">
-      <h2>File Organizer VIP</h2>
-      <p>Automatically sort and organize your files.</p>
-      <a href="https://drive.google.com/file/d/1UyYf6rvgM-bpznrvHBnYufFDmfWI6Ypb/view?usp=drivesdk" target="_blank">Download</a>
-    </div>
-    
-    <div class="product">
-      <img src="static/icons/folderart.ico" alt="FolderArt Pro icon">
-      <h2>FolderArt Pro</h2>
-      <p>Add custom icons to your folders.</p>
-      <a href="https://drive.google.com/file/d/1V3IUbyukliKfFp2gDVGFgOZzZdkZqkBQ/view?usp=drivesdk" target="_blank">Download</a>
-    </div>
-    
-    <div class="product">
-      <img src="static/icons/cutdisk.ico" alt="CUT DISK icon">
-      <h2>CUT DISK</h2>
-      <p>Securely shred your disk data.</p>
-      <a href="https://drive.google.com/file/d/1V6Vt8cnq-n0Pe2lqolbRAhgj2t-GZnBf/view?usp=drivesdk" target="_blank">Download</a>
-    </div>
-    
+  {% endfor %}
+
+  <div class="pagination">
+    {% if page > 1 %}
+      <a href="/page/{{ page - 1 }}">← Prev</a>
+    {% endif %}
+    {% if page < total_pages %}
+      <a href="/page/{{ page + 1 }}">Next →</a>
+    {% endif %}
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
